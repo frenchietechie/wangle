@@ -192,7 +192,7 @@ folly::Optional<std::string> SSLUtil::decryptOpenSSLEncFilePassString(
       digest,
       reinterpret_cast<const unsigned char*>(salt.data()),
       reinterpret_cast<const unsigned char*>(password.data()),
-      folly::to_narrow(folly::to_signed(password.size())),
+      password.size(),
       1 /* one round */,
       key.data(),
       iv.data());

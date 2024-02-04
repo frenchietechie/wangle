@@ -164,13 +164,16 @@ class SSLSessionCacheManager {
    */
   void removeSession(SSL_CTX* ctx, SSL_SESSION* session);
 
+  // Note(BRAISER) This was conditionned on FOLLY_SSL_110 but it's also the case for boringssl now.
+  using session_callback_arg_session_id_t = const unsigned char*;
+
   /**
    * Invoked by openssl when a client requests a stateful session resumption.
    * Triggers a lookup in our local cache and potentially an asynchronous
    * request to an external cache.
    */
   SSL_SESSION*
-  getSession(SSL* ssl, unsigned char* session_id, int id_len, int* copyflag);
+  getSession(SSL* ssl, session_callback_arg_session_id_t session_id, int id_len, int* copyflag);
 
   /**
    * Store a new session record in the external cache
@@ -189,12 +192,6 @@ class SSLSessionCacheManager {
    * SSL_CTX_sess_set_new/get/remove_cb
    */
   static void removeSessionCallback(SSL_CTX* ctx, SSL_SESSION* session);
-
-#if FOLLY_OPENSSL_IS_110
-  using session_callback_arg_session_id_t = const unsigned char*;
-#else
-  using session_callback_arg_session_id_t = unsigned char*;
-#endif
 
   static SSL_SESSION* getSessionCallback(
       SSL* ssl,

@@ -264,7 +264,7 @@ SSL_SESSION* SSLSessionCacheManager::getSessionCallback(
 
 SSL_SESSION* SSLSessionCacheManager::getSession(
     SSL* ssl,
-    unsigned char* session_id,
+    session_callback_arg_session_id_t session_id,
     int id_len,
     int* copyflag) {
   VLOG(7) << "SSL get session callback";
